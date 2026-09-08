@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "github.com/yourusername/yourrepo/protos/proto/sso;auth";
+option go_package = "github.com/JKhanif/sso-service/protos/gen/go/sso;auth";
 
 service Auth {
     rpc Register (RegisterRequest) returns (RegisterResponse);

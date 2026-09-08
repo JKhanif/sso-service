@@ -1,0 +1,6 @@
+env: "local" #dev, prod
+storage_path: "E:/Go/SSO/storage" # путь к хранилищу
+token_ttl: 3600s # время жизни токена в секундах
+grpc:
+  port: 50051 # порт gRPC-сервера
+  timeout: 10s
