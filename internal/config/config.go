@@ -12,7 +12,7 @@ import (
 // Конфигурация загружается из config.yaml, структура повторяет его поля
 type Config struct {
 	Env         string        `yaml:"env" env-default:"local"`
-	StoragePath string        `yaml:"storage_path" env-required:"true"`
+	DatabaseURL string        `yaml:"database_url" env-required:"true"`
 	TokenTTL    time.Duration `yaml:"token_ttl" env-default:"3600s"`
 	GRPC        GRPCConfig    `yaml:"grpc"`
 }
@@ -28,14 +28,18 @@ func MustLoad() *Config {
 		panic("config path is empty")
 	}
 
-	_, err := os.Stat(path)
+	return MustLoadByPath(path)
+}
+
+func MustLoadByPath(configPath string) *Config {
+	_, err := os.Stat(configPath)
 	if os.IsNotExist(err) {
-		panic("config file not found: " + path)
+		panic("config file does not found exist: " + configPath)
 	}
 
 	var cfg Config
 
-	err = cleanenv.ReadConfig(path, &cfg)
+	err = cleanenv.ReadConfig(configPath, &cfg)
 	if err != nil {
 		panic("failed to read config: " + err.Error())
 	}

@@ -4,11 +4,11 @@ import (
 	"time"
 
 	"github.com/JKhanif/sso-service/internal/domain/models"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func NewToken(user models.User, app models.App, duration time.Duration) (string, error) {
-	token := jwt.New(jwt.SigningMethodES256)
+	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["uid"] = user.ID

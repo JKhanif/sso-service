@@ -39,6 +39,7 @@ var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
 	ErrInvalidAppID       = errors.New("invalid app id")
 	ErrUserExists         = errors.New("user already exists")
+	ErrUserNotFound       = errors.New("user not found")
 )
 
 // New returns a new instance of the Auth service.
@@ -98,6 +99,7 @@ func (a *Auth) Login(ctx context.Context, email string, password string, appID i
 	token, err := jwt.NewToken(user, app, a.tokenTTL)
 	if err != nil {
 		a.log.Error("failed to generate token", sl.Err(err))
+		return "", fmt.Errorf("%s: %w", op, err)
 	}
 
 	return token, nil
@@ -146,9 +148,9 @@ func (a *Auth) IsAdmin(ctx context.Context, userID int64) (bool, error) {
 
 	isAdmin, err := a.usrProvider.IsAdmin(ctx, userID)
 	if err != nil {
-		if errors.Is(err, storage.ErrAppNotFound) {
+		if errors.Is(err, storage.ErrUserNotFound) {
 			log.Warn("user not found", sl.Err(err))
-			return false, fmt.Errorf("%s: %w", op, ErrInvalidAppID)
+			return false, fmt.Errorf("%s: %w", op, ErrUserNotFound)
 		}
 		return false, fmt.Errorf("%s: %w", op, err)
 	}

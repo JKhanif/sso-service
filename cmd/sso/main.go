@@ -24,11 +24,9 @@ func main() {
 
 	log.Info("Starting application", slog.Any("cfg", cfg))
 
-	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+	application := app.New(log, cfg.GRPC.Port, cfg.DatabaseURL, cfg.TokenTTL)
 
 	go application.GRPCSrv.MustRun()
-
-	// TODO: запустить gRPC-сервер приложения
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
@@ -51,6 +49,8 @@ func setupLogger(env string) *slog.Logger {
 	case envProd:
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	default:
+		log = setupPrettySlog()
 	}
 
 	return log
