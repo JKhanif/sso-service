@@ -11,15 +11,15 @@ import (
 
 // Конфигурация загружается из config.yaml, структура повторяет его поля
 type Config struct {
-	Env         string        `yaml:"env" env-default:"local"`
-	DatabaseURL string        `yaml:"database_url" env-required:"true"`
-	TokenTTL    time.Duration `yaml:"token_ttl" env-default:"3600s"`
+	Env         string        `yaml:"env" env:"ENV" env-default:"local"`
+	DatabaseURL string        `yaml:"database_url" env:"DATABASE_URL" env-required:"true"`
+	TokenTTL    time.Duration `yaml:"token_ttl" env:"TOKEN_TTL" env-default:"3600s"`
 	GRPC        GRPCConfig    `yaml:"grpc"`
 }
 
 type GRPCConfig struct {
-	Port    int           `yaml:"port" env-default:"50051"`
-	Timeout time.Duration `yaml:"timeout" env-default:"10s"`
+	Port    int           `yaml:"port" env:"GRPC_PORT" env-default:"50051"`
+	Timeout time.Duration `yaml:"timeout" env:"GRPC_TIMEOUT" env-default:"10s"`
 }
 
 func MustLoad() *Config {

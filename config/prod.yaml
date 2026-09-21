@@ -1,0 +1,6 @@
+env: prod
+database_url: postgres://user:pass@postgres:5432/sso?sslmode=disable
+token_ttl: 3600s
+grpc:
+  port: 50051
+  timeout: 10s
